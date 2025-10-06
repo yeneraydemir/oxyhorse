@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
 <ul>
   <li><a href="/">Anasayfa</a></li>
   <li><a href="hakkimizda.html">Hakkımızda</a></li>
-  <li><a href="#services">Hizmetler</a></li>
 
   <!-- OxiHorse dropdown -->
   <li class="dropdown">
@@ -26,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <ul>
       <!-- Kategori 1 -->
       <li class="dropdown">
-        <a href="#" class="cursor-default">
+        <a class="cursor-default">
           <span>Ürün Bilgisi</span>
           <i class="bi bi-chevron-right toggle-dropdown"></i>
         </a>
@@ -39,12 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       <!-- Kategori 2 -->
       <li class="dropdown">
-        <a href="#" class="cursor-default">
+        <a class="cursor-default">
           <span>Kullanım & Protokoller</span>
           <i class="bi bi-chevron-right toggle-dropdown"></i>
         </a>
         <ul>
-          <li><a href="oxy-horse-kullanimi.html">Nasıl Kullanılır?</a></li>
+          <li><a href="oxy-horse-nasil-kullanilir.html">Nasıl Kullanılır?</a></li>
           <li><a href="oxy-horse-senaryolar.html">Senaryolar</a></li>
           <li><a href="oxy-horse-ddsp.html">DDSP Tedavi Desteği</a></li>
         </ul>
@@ -52,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       <!-- Kategori 3 -->
       <li class="dropdown">
-        <a href="#" class="cursor-default">
+        <a class="cursor-default">
           <span>Destek</span>
           <i class="bi bi-chevron-right toggle-dropdown"></i>
         </a>
@@ -65,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
     </ul>
   </li>
 
-  <li><a href="/iletisim">İletişim</a></li>
+  <li><a href="iletisim.html">İletişim</a></li>
 </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list" aria-label="Menüyü Aç/Kapat"></i>
       </nav>
