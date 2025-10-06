@@ -1,12 +1,11 @@
 // /oxyhorse/header.js
 document.addEventListener("DOMContentLoaded", () => {
-  // 1) HEADER'ı HTML string olarak ekle
+  /* ----------------- 1) HEADER'ı ekle ----------------- */
   const headerHTML = `
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
       <a href="/" class="logo d-flex align-items-center me-auto me-xl-0">
-        <!-- <img src="assets/img/logo.webp" alt=""> -->
         <h1 class="sitename">OXY HORSE</h1>
       </a>
 
@@ -15,10 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
   <li><a href="/">Anasayfa</a></li>
   <li><a href="hakkimizda.html">Hakkımızda</a></li>
 
-  <!-- OxiHorse dropdown -->
+  <!-- OxyHorse dropdown -->
   <li class="dropdown">
     <a href="#" class="cursor-default">
-      <span>OxiHorse Rehberi</span>
+      <span>Oxy Horse Rehberi</span>
       <i class="bi bi-chevron-down toggle-dropdown"></i>
     </a>
 
@@ -30,16 +29,16 @@ document.addEventListener("DOMContentLoaded", () => {
           <i class="bi bi-chevron-right toggle-dropdown"></i>
         </a>
         <ul>
-          <li><a href="oxy-horse-nedir.html">OxiHorse Nedir?</a></li>
+          <li><a href="oxy-horse-nedir.html">Oxy Horse Nedir?</a></li>
           <li><a href="oxy-horse-faydalari.html">Faydaları</a></li>
-          <li><a href="oxy-horse-bilim.html">Bilim & Güvenlik</a></li>
+          <li><a href="oxy-horse-bilim.html">Bilim &amp; Güvenlik</a></li>
         </ul>
       </li>
 
       <!-- Kategori 2 -->
       <li class="dropdown">
         <a class="cursor-default">
-          <span>Kullanım & Protokoller</span>
+          <span>Kullanım &amp; Protokoller</span>
           <i class="bi bi-chevron-right toggle-dropdown"></i>
         </a>
         <ul>
@@ -56,7 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
           <i class="bi bi-chevron-right toggle-dropdown"></i>
         </a>
         <ul>
-          <li><a href="oxy-horse-egitim.html">Uygulama Eğitimi</a></li>
           <li><a href="oxy-horse-sss.html">SSS</a></li>
           <li><a href="oxy-horse-temin.html">Nasıl Temin Ederim?</a></li>
         </ul>
@@ -74,93 +72,139 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   </header>`;
 
-  // Eğer sayfanda <header id="header"> yoksa en başa ekle
   if (!document.querySelector("header#header")) {
     document.body.insertAdjacentHTML("afterbegin", headerHTML);
   }
 
-  // 2) SEÇİCİLER
+  /* ----------------- 2) SEÇİCİLER ----------------- */
   const nav = document.querySelector("#navmenu");
+  if (!nav) return;
+
   const navLinks = nav.querySelectorAll("ul li a[href]");
   const sections = document.querySelectorAll("section[id]");
-
-  // 3) MOBİL MENÜ AÇ/KAPAT
   const mobileToggle = nav.querySelector(".mobile-nav-toggle");
+
+  /* ----------------- 3) MOBİL MENÜ ----------------- */
   mobileToggle?.addEventListener("click", () => {
     nav.classList.toggle("navmenu-open");
     mobileToggle.classList.toggle("bi-x");
     mobileToggle.classList.toggle("bi-list");
   });
 
-  // 4) DROPDOWN (mobil ve desktop click)
-  nav.querySelectorAll(".dropdown > a").forEach(trigger => {
+  /* ----------------- 4) DROPDOWN ----------------- */
+  nav.querySelectorAll(".dropdown > a.cursor-default").forEach(trigger => {
     trigger.addEventListener("click", (e) => {
-      e.preventDefault(); // sayfayı kaydırmasın
-      const li = trigger.parentElement;
-      li.classList.toggle("dropdown-active");
+      e.preventDefault();
+      trigger.parentElement?.classList.toggle("dropdown-active");
     });
   });
 
-  // 5) SCROLLSPY: bölüme göre active
-  const HEADER_OFFSET = 100; // header yüksekliğine göre ayarla
-  function setActiveOnScroll() {
+  /* ----------------- 5) YARDIMCI: path/slug normalize ----------------- */
+  // '/iletisim' -> 'iletisim' ; 'iletisim.html' -> 'iletisim' ; '/' -> 'index'
+  const toSlug = (pathOrHref) => {
+    try {
+      const u = new URL(pathOrHref, location.href);
+      let seg = u.pathname.split("/").filter(Boolean).pop() || "index";
+      seg = seg.replace(/\.html?$/i, "");      // .html kaldır
+      return seg || "index";
+    } catch {
+      // relative '#anchor' vs plain 'iletisim.html'
+      const raw = String(pathOrHref).split("#")[0].split("?")[0];
+      let seg = raw.split("/").filter(Boolean).pop() || "index";
+      seg = seg.replace(/\.html?$/i, "");
+      return seg || "index";
+    }
+  };
+
+  const CURRENT_SLUG = toSlug(location.pathname);
+  const isHome = CURRENT_SLUG === "index";
+
+  /* ----------------- 6) ÇOK SAYFA: aktif linki belirle ----------------- */
+  function setActiveByPath() {
+    navLinks.forEach(a => {
+      const href = a.getAttribute("href") || "";
+      if (href.startsWith("#")) return; // anchor'lar scrollspy ile yönetilecek
+
+      // '/' da anasayfa sayılır
+      const linkSlug = href === "/" ? "index" : toSlug(href);
+
+      const isActive =
+        (linkSlug === "index" && isHome) ||
+        linkSlug === CURRENT_SLUG;
+
+      a.classList.toggle("active", !!isActive);
+
+      // Çocuk aktifse ebeveyn dropdown'u da açık tut
+      if (isActive) {
+        const parentDrop = a.closest("li.dropdown");
+        parentDrop?.classList.add("dropdown-active");
+        parentDrop?.closest("li.dropdown")?.classList.add("dropdown-active");
+      }
+    });
+  }
+
+  /* ----------------- 7) TEK SAYFA (#anchor) scrollspy ----------------- */
+  const HEADER_OFFSET = 100;
+  function setActiveByScroll() {
+    // Sadece anchor linkler varsa çalıştır
+    const anchorLinks = Array.from(navLinks).filter(a => (a.getAttribute("href") || "").startsWith("#"));
+    if (anchorLinks.length === 0) return;
+
     let found = false;
-    const scrollY = window.pageYOffset;
+    const y = window.pageYOffset;
 
     sections.forEach(sec => {
       const top = sec.offsetTop - HEADER_OFFSET;
       const bottom = top + sec.offsetHeight;
-      if (scrollY >= top && scrollY < bottom) {
-        const id = sec.getAttribute("id");
-        navLinks.forEach(a => {
+      if (y >= top && y < bottom) {
+        const id = sec.id;
+        anchorLinks.forEach(a => {
           a.classList.toggle("active", a.getAttribute("href") === `#${id}`);
         });
         found = true;
       }
     });
 
-    // Hiç bölüm bulunamazsa varsayılanı "Home" yap
     if (!found) {
-      navLinks.forEach(a => a.classList.remove("active"));
+      anchorLinks.forEach(a => a.classList.remove("active"));
+      // Varsayılan anchor varsa (#hero vb.)
       const home = nav.querySelector('a[href="#hero"]');
       home?.classList.add("active");
     }
   }
 
-  // 6) Anchor tıklamasında smooth scroll + active
+  /* ----------------- 8) Anchor tıklaması: smooth scroll ----------------- */
   navLinks.forEach(a => {
     const href = a.getAttribute("href") || "";
-    if (href.startsWith("#")) {
-      a.addEventListener("click", (e) => {
-        const target = document.querySelector(href);
-        if (target) {
-          e.preventDefault();
-          // Mobilde menü açıksa kapat
-          if (nav.classList.contains("navmenu-open")) {
-            nav.classList.remove("navmenu-open");
-            mobileToggle?.classList.remove("bi-x");
-            mobileToggle?.classList.add("bi-list");
-          }
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
-          // Kaydırma animasyonu devam ederken aktifliği hemen ver
-          navLinks.forEach(l => l.classList.remove("active"));
-          a.classList.add("active");
-        }
-      });
-    }
+    if (!href.startsWith("#")) return;
+
+    a.addEventListener("click", (e) => {
+      const target = document.querySelector(href);
+      if (!target) return;
+      e.preventDefault();
+
+      if (nav.classList.contains("navmenu-open")) {
+        nav.classList.remove("navmenu-open");
+        mobileToggle?.classList.remove("bi-x");
+        mobileToggle?.classList.add("bi-list");
+      }
+
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      // Anında görsel geri bildirim
+      navLinks.forEach(l => l.classList.remove("active"));
+      a.classList.add("active");
+    });
   });
 
-  // 7) Çok sayfa yapısı kullanırsan (about.html vs.), şu bloğu AÇ:
-  /*
-  const current = location.pathname.split("/").pop() || "index.html";
-  navLinks.forEach(a => {
-    const p = a.getAttribute("href");
-    if (!p || p.startsWith("#")) return;
-    a.classList.toggle("active", p === current || (p === "index.html" && current === ""));
-  });
-  */
+  /* ----------------- 9) İlk yükleme + olaylar ----------------- */
+  setActiveByPath();          // çok sayfa
+  setActiveByScroll();        // anchor'lar varsa
 
-  // 8) Olaylar
-  setActiveOnScroll();                    // ilk yüklemede
-  window.addEventListener("scroll", setActiveOnScroll, { passive: true });
+  window.addEventListener("scroll", setActiveByScroll, { passive: true });
+  window.addEventListener("popstate", () => {
+    // kullanıcı tarayıcıyla geri/ileri giderse aktifliği güncelle
+    setActiveByPath();
+    setActiveByScroll();
+  });
 });
