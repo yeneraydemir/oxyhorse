@@ -12,14 +12,14 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="sitename">Oxy Horse</span>
           </a>
           <div class="footer-contact pt-3">
-            <p>Türkiye</p>
-            <p class="mt-3"><strong>Telefon:</strong> <span>0850 XXX XX XX</span></p>
-            <p><strong>E-posta:</strong> <span>info@oxyhorse.com</span></p>
+            <p>Eskişehir Yolu, Mustafa Kemal Mahallesi 2143. Sokak
+              No: 7 Gökçeoğlu Plaza No:10 Çankaya / Ankara</p>
+            <p class="mt-3"><strong>Telefon:</strong> <span>+90 530 380 0680</span></p>
+            <p><strong>E-posta:</strong> <span>bilgi@odakgis.com.tr</span></p>
           </div>
 
           <div class="social-links d-flex mt-4">
             <a href="#" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="bi bi-instagram"></i></a>
-            <a href="#" aria-label="Facebook"  target="_blank" rel="noopener noreferrer"><i class="bi bi-facebook"></i></a>
             <a href="#" aria-label="LinkedIn"  target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin"></i></a>
             <a href="#" aria-label="YouTube"   target="_blank" rel="noopener noreferrer"><i class="bi bi-youtube"></i></a>
           </div>
