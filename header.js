@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <i class="mobile-nav-toggle d-xl-none bi bi-list" aria-label="Menüyü Aç/Kapat"></i>
       </nav>
 
-      <a class="btn-getstarted" href="/iletisim">Temin Et</a>
+      <a class="btn-getstarted" href="/oxy-horse-rehber">Rehber</a>
 
     </div>
   </header>`;
