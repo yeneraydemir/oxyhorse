@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <div class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
       <a href="/" class="logo d-flex align-items-center me-auto me-xl-0">
-        <h1 class="sitename">OXY HORSE</h1>
+        <img class="img-fluid" src="./assets/logo/oxy-horse-logo.png" alt="Oxy Horse Logo">
       </a>
 
       <nav id="navmenu" class="navmenu">
@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <li><a href="oxy-horse-nasil-kullanilir.html">Nasıl Kullanılır?</a></li>
           <li><a href="oxy-horse-senaryolar.html">Senaryolar</a></li>
           <li><a href="oxy-horse-ddsp.html">DDSP Tedavi Desteği</a></li>
+          <li><a href="oxy-horse-asim-donemi.html">Aşım Dönemi</a></li>
         </ul>
       </li>
 
@@ -67,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <i class="mobile-nav-toggle d-xl-none bi bi-list" aria-label="Menüyü Aç/Kapat"></i>
       </nav>
 
-      <a class="btn-getstarted" href="/oxy-horse-rehber">Rehber</a>
+      <a class="btn-getstarted" href="/oxy-horse-rehber.html">Rehber</a>
 
     </div>
   </header>`;
