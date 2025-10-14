@@ -84,6 +84,13 @@ h6 {
   height: auto;
   display: block;
 }
+
+@media (max-width: 991.98px) {
+  .u-hide-mobile {
+    display: none !important;
+  }
+}
+
 /*--------------------------------------------------------------
 # Global Header
 --------------------------------------------------------------*/
