@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <li><a href="oxy-horse-nasil-kullanilir.html">Nasıl Kullanılır?</a></li>
           <li><a href="oxy-horse-senaryolar.html">Senaryolar</a></li>
           <li><a href="oxy-horse-ddsp.html">DDSP Tedavi Desteği</a></li>
+          <li><a href="oxy-horse-medikal-protokoller.html">Medikal Protokoller</a></li>
         </ul>
       </li>
       <!-- Kategori 3 -->
@@ -269,3 +270,33 @@ document.addEventListener("DOMContentLoaded", () => {
     if (nav.classList.contains("navmenu-open")) toggleMenu(false);
   });
 });
+/* ----------------- 6) ÇOK SAYFA: aktif linki belirle ----------------- */
+function setActiveByPath() {
+  // Temizle
+  nav.querySelectorAll("a.active").forEach(a => a.classList.remove("active"));
+  nav.querySelectorAll("li.dropdown").forEach(li => li.classList.remove("active-parent", "dropdown-active"));
+
+  navLinks.forEach(a => {
+    const href = a.getAttribute("href") || "";
+    if (href.startsWith("#")) return;
+
+    const linkSlug = href === "/" ? "index" : toSlug(href);
+    const isActive = (linkSlug === "index" && isHome) || linkSlug === CURRENT_SLUG;
+
+    if (isActive) {
+      // 1) Tıklanan/gezilen link aktif
+      a.classList.add("active");
+
+      // 2) Tüm ebeveyn dropdown’ları aç+vurgula
+      let dd = a.closest("li.dropdown");
+      while (dd) {
+        dd.classList.add("dropdown-active", "active-parent");
+        // :scope > a = dropdown başlığı (href'siz de olabilir)
+        const trigger = dd.querySelector(":scope > a");
+        trigger?.classList.add("active");
+        // bir üst dropdown’a çık
+        dd = dd.parentElement?.closest("li.dropdown") || null;
+      }
+    }
+  });
+}
